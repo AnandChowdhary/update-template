@@ -1,6 +1,7 @@
 import { execSync } from "child_process";
 import recursiveReaddir from "recursive-readdir";
 import { join } from "path";
+import fg from "fast-glob";
 
 export const update = async () => {
   console.log("Updating...");
@@ -9,7 +10,9 @@ export const update = async () => {
   const tempDir = `tempDir_${Math.random().toString(32)}`;
   execSync(`git clone ${repoUrl} ${tempDir}`);
   const files = await recursiveReaddir(join(".", tempDir));
-  console.log(files);
+  for await (const file of files) {
+    //
+  }
 };
 
 update();
