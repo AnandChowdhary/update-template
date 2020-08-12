@@ -1,0 +1,29 @@
+{
+  "name": "update-template",
+  "version": "0.0.0",
+  "description": "Easily update repos created with GitHub templates",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/koj-co/update-template.git"
+  },
+  "keywords": [
+    "github",
+    "template",
+    "repo",
+    "tool",
+    "tooling",
+    "nodejs",
+    "typescript"
+  ],
+  "author": "Anand Chowdhary <mail@anandchowdhary.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/koj-co/update-template/issues"
+  },
+  "homepage": "https://github.com/koj-co/update-template#readme"
+}
