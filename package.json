@@ -40,6 +40,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
+    "fast-glob": "^3.2.4",
     "recursive-readdir": "^2.2.2"
   }
 }
