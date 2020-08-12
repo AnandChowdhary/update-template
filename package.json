@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "build": "tsc",
+    "start": "ts-node update.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
