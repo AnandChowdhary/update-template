@@ -15,6 +15,6 @@
     "outDir": "./dist",
     "typeRoots": ["node_modules/@types", "@types"]
   },
-  "include": ["update.ts"],
+  "include": ["update.ts", "cli.ts"],
   "exclude": ["node_modules"]
 }
