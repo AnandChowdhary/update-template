@@ -42,6 +42,22 @@ Lastly, add an update script to your `package.json` with the URL of your reposit
 
 When users want to update your template, they can run `npm run update-template`
 
+If you want to sync your `package.json` and `package-lock.json` dependencies (without changing keys like the package name), you can add:
+
+```json
+{
+  "npmDependencies": true
+}
+```
+
+Similarly, npm scripts can be added:
+
+```json
+{
+  "npmScripts": true
+}
+```
+
 ## 👩‍💻 Development
 
 Build TypeScript:
