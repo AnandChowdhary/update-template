@@ -31,16 +31,6 @@ export const update = async () => {
       join(".", "package.json"),
       JSON.stringify(localPackageJson, null, 2) + "\n"
     );
-
-    const templatePackageLockJson = await readJson(
-      join(".", tempDir, "package-lock.json")
-    );
-    const localPackageLockJson = await readJson(join(".", "package-lock.json"));
-    localPackageLockJson.dependencies = templatePackageLockJson.dependencies;
-    await writeFile(
-      join(".", "package-lock.json"),
-      JSON.stringify(localPackageLockJson, null, 2)
-    );
   }
   if (config.npmScripts) {
     const templatePackageJson = await readJson(
