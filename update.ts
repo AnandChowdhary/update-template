@@ -1,7 +1,7 @@
 import { execSync } from "child_process";
 import { join } from "path";
 import fg from "fast-glob";
-import { readJson, copyFile, remove, ensureFile, writeJson } from "fs-extra";
+import { readJson, copyFile, remove, ensureFile, writeFile } from "fs-extra";
 
 export const update = async () => {
   console.log("Updating...");
@@ -27,14 +27,20 @@ export const update = async () => {
     );
     const localPackageJson = await readJson(join(".", "package.json"));
     localPackageJson.dependencies = templatePackageJson.dependencies;
-    await writeJson(join(".", "package.json"), localPackageJson);
+    await writeFile(
+      join(".", "package.json"),
+      JSON.stringify(localPackageJson, null, 2) + "\n"
+    );
 
     const templatePackageLockJson = await readJson(
       join(".", tempDir, "package-lock.json")
     );
     const localPackageLockJson = await readJson(join(".", "package-lock.json"));
     localPackageLockJson.dependencies = templatePackageLockJson.dependencies;
-    await writeJson(join(".", "package-lock.json"), localPackageLockJson);
+    await writeFile(
+      join(".", "package-lock.json"),
+      JSON.stringify(localPackageLockJson, null, 2)
+    );
   }
   if (config.npmScripts) {
     const templatePackageJson = await readJson(
@@ -42,9 +48,10 @@ export const update = async () => {
     );
     const localPackageJson = await readJson(join(".", "package.json"));
     localPackageJson.scripts = templatePackageJson.scripts;
-    await writeJson(join(".", "package.json"), localPackageJson);
+    await writeFile(
+      join(".", "package.json"),
+      JSON.stringify(localPackageJson, null, 2) + "\n"
+    );
   }
   await remove(join(".", tempDir));
 };
-
-update();
