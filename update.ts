@@ -26,7 +26,15 @@ export const update = async () => {
       join(".", tempDir, "package.json")
     );
     const localPackageJson = await readJson(join(".", "package.json"));
-    localPackageJson.dependencies = templatePackageJson.dependencies;
+    const dependencies = {
+      ...localPackageJson.dependencies,
+      ...templatePackageJson.dependencies,
+    };
+    const ordered: { [index: string]: string } = {};
+    Object.keys(dependencies)
+      .sort()
+      .forEach((key) => (ordered[key] = dependencies[key]));
+    localPackageJson.dependencies = ordered;
     await writeFile(
       join(".", "package.json"),
       JSON.stringify(localPackageJson, null, 2) + "\n"
@@ -37,7 +45,15 @@ export const update = async () => {
       join(".", tempDir, "package.json")
     );
     const localPackageJson = await readJson(join(".", "package.json"));
-    localPackageJson.scripts = templatePackageJson.scripts;
+    const scripts = {
+      ...localPackageJson.scripts,
+      ...templatePackageJson.scripts,
+    };
+    const ordered: { [index: string]: string } = {};
+    Object.keys(scripts)
+      .sort()
+      .forEach((key) => (ordered[key] = scripts[key]));
+    localPackageJson.scripts = ordered;
     await writeFile(
       join(".", "package.json"),
       JSON.stringify(localPackageJson, null, 2) + "\n"
