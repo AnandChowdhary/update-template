@@ -5,15 +5,21 @@ import { readJson, copyFile, remove, ensureFile, writeFile } from "fs-extra";
 
 export const update = async () => {
   console.log("Updating...");
-  const repoUrl = process.argv[2];
+  let repoUrl = process.argv[2];
   if (!repoUrl) throw new Error("Provide a repository URL");
+  if (!repoUrl.includes("@") && !repoUrl.includes("//")) repoUrl = `https://github.com/${repoUrl}`;
   const tempDir = `tempDir_${Math.random().toString(32).split(".")[1]}`;
   execSync(`git clone ${repoUrl} ${tempDir}`);
-  const config: {
+  let config: {
     files?: string[];
     npmDependencies?: boolean;
     npmScripts?: boolean;
-  } = await readJson(join(".", tempDir, ".templaterc.json"));
+  } = {};
+  try {
+    config = await readJson(join(".", tempDir, ".templaterc.json"));
+  } catch (error) {
+    console.log(".templaterc.json config file not found");
+  }
   const files = (
     await fg((config.files || []).map((glob) => `${tempDir}/${glob}`))
   ).map((file) => file.substring(tempDir.length));
