@@ -7,11 +7,13 @@ export const update = async () => {
   console.log("Updating...");
   let repoUrl = process.argv[2];
   if (!repoUrl) throw new Error("Provide a repository URL");
-  if (!repoUrl.includes("@") && !repoUrl.includes("//")) repoUrl = `https://github.com/${repoUrl}`;
+  if (!repoUrl.includes("@") && !repoUrl.includes("//"))
+    repoUrl = `https://github.com/${repoUrl}`;
   const tempDir = `tempDir_${Math.random().toString(32).split(".")[1]}`;
   execSync(`git clone ${repoUrl} ${tempDir}`);
   let config: {
     files?: string[];
+    removeFiles?: string[];
     npmDependencies?: boolean;
     npmScripts?: boolean;
   } = {};
@@ -64,6 +66,13 @@ export const update = async () => {
       join(".", "package.json"),
       JSON.stringify(localPackageJson, null, 2) + "\n"
     );
+  }
+  config.removeFiles = config.removeFiles || [];
+  config.removeFiles = [...config.removeFiles, ".templaterc.json"];
+  console.log(config.removeFiles);
+  const filesToDelete = await fg(config.removeFiles);
+  for await (const file of filesToDelete) {
+    await remove(join(".", file));
   }
   await remove(join(".", tempDir));
 };
