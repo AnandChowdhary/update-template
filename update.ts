@@ -9,6 +9,13 @@ export const update = async () => {
   if (!repoUrl) throw new Error("Provide a repository URL");
   if (!repoUrl.includes("@") && !repoUrl.includes("//"))
     repoUrl = `https://github.com/${repoUrl}`;
+
+  // If this is running in a Github Actions workflow, we know the repo name
+  let [owner, repo] = (process.env.GITHUB_REPOSITORY || "").split("/");
+  if (owner && repo)
+    if (repoUrl === `https://github.com/${owner}/${repo}`)
+      return console.log("Skipping updating same repo");
+
   const tempDir = `tempDir_${Math.random().toString(32).split(".")[1]}`;
   execSync(`git clone ${repoUrl} ${tempDir}`);
   let config: {
@@ -22,6 +29,7 @@ export const update = async () => {
   } catch (error) {
     console.log(".templaterc.json config file not found");
   }
+
   const files = (
     await fg((config.files || []).map((glob) => `${tempDir}/${glob}`))
   ).map((file) => file.substring(tempDir.length));
@@ -29,6 +37,7 @@ export const update = async () => {
     await ensureFile(join(".", file));
     await copyFile(join(".", tempDir, file), join(".", file));
   }
+
   if (config.npmDependencies) {
     const templatePackageJson = await readJson(
       join(".", tempDir, "package.json")
@@ -48,6 +57,7 @@ export const update = async () => {
       JSON.stringify(localPackageJson, null, 2) + "\n"
     );
   }
+
   if (config.npmScripts) {
     const templatePackageJson = await readJson(
       join(".", tempDir, "package.json")
@@ -67,6 +77,7 @@ export const update = async () => {
       JSON.stringify(localPackageJson, null, 2) + "\n"
     );
   }
+
   config.removeFiles = config.removeFiles || [];
   config.removeFiles = [...config.removeFiles, ".templaterc.json"];
   console.log(config.removeFiles);
